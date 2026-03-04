@@ -64,6 +64,75 @@ if (stickyCta && heroSection) {
   stickyObserver.observe(heroSection);
 }
 
+/* ===== Carousel (Reviews) ===== */
+(function () {
+  var track = document.querySelector('.carousel__track');
+  if (!track) return;
+
+  var slides = document.querySelectorAll('.carousel__slide');
+  var prevBtn = document.querySelector('.carousel__btn--prev');
+  var nextBtn = document.querySelector('.carousel__btn--next');
+  var dotsContainer = document.querySelector('.carousel__dots');
+  var current = 0;
+  var total = slides.length;
+
+  // Slide width as percentage (matches CSS min-width)
+  function getSlideWidth() {
+    return window.innerWidth < 768 ? 78 : 70;
+  }
+
+  // Create dots
+  for (var i = 0; i < total; i++) {
+    var dot = document.createElement('button');
+    dot.className = 'carousel__dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('aria-label', 'Отзыв ' + (i + 1));
+    dot.dataset.index = i;
+    dotsContainer.appendChild(dot);
+  }
+
+  var dots = dotsContainer.querySelectorAll('.carousel__dot');
+
+  function goTo(index) {
+    if (index < 0) index = total - 1;
+    if (index >= total) index = 0;
+    current = index;
+    var sw = getSlideWidth();
+    // Center the active slide: offset = slide * index - (100 - slideWidth) / 2
+    var offset = sw * current - (100 - sw) / 2;
+    track.style.transform = 'translateX(-' + offset + '%)';
+    slides.forEach(function (s, i) {
+      s.classList.toggle('is-active', i === current);
+    });
+    dots.forEach(function (d, i) {
+      d.classList.toggle('is-active', i === current);
+    });
+  }
+
+  // Init first slide
+  goTo(0);
+
+  prevBtn.addEventListener('click', function () { goTo(current - 1); });
+  nextBtn.addEventListener('click', function () { goTo(current + 1); });
+
+  dotsContainer.addEventListener('click', function (e) {
+    if (e.target.classList.contains('carousel__dot')) {
+      goTo(Number(e.target.dataset.index));
+    }
+  });
+
+  // Swipe support
+  var startX = 0;
+  var diffX = 0;
+  track.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchmove', function (e) { diffX = e.touches[0].clientX - startX; }, { passive: true });
+  track.addEventListener('touchend', function () {
+    if (Math.abs(diffX) > 40) {
+      goTo(diffX > 0 ? current - 1 : current + 1);
+    }
+    diffX = 0;
+  });
+})();
+
 /* ===== Smooth scroll for anchor links ===== */
 document.querySelectorAll('a[href^="#"]').forEach(function (link) {
   link.addEventListener('click', function (e) {
