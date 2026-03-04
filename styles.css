@@ -679,6 +679,44 @@ h3 {
   }
 }
 
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--bg-dark);
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  padding: 32px 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__name {
+  margin: 0 0 4px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer__inn {
+  margin: 0 0 16px;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.footer__links a {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+
+.footer__links a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
 /* ===== LARGE DESKTOP (1280px+) ===== */
 @media (min-width: 1280px) {
   h1 {
