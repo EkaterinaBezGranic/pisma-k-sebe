@@ -97,8 +97,13 @@ if (stickyCta && heroSection) {
     if (index >= total) index = 0;
     current = index;
     var sw = getSlideWidth();
-    // Center the active slide: offset = slide * index - (100 - slideWidth) / 2
-    var offset = sw * current - (100 - sw) / 2;
+    // Center the active slide within the viewport
+    var padding = (100 - sw) / 2;
+    var offset = sw * current - padding;
+    // Clamp: don't scroll past start or end
+    var maxOffset = sw * (total - 1);
+    if (offset < 0) offset = 0;
+    if (offset > maxOffset) offset = maxOffset;
     track.style.transform = 'translateX(-' + offset + '%)';
     slides.forEach(function (s, i) {
       s.classList.toggle('is-active', i === current);
