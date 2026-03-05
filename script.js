@@ -70,16 +70,11 @@ if (stickyCta && heroSection) {
   if (!track) return;
 
   var slides = document.querySelectorAll('.carousel__slide');
-  var prevBtn = document.querySelector('.carousel__btn--prev');
-  var nextBtn = document.querySelector('.carousel__btn--next');
+  var prevBar = document.querySelector('.carousel__bar--prev');
+  var nextBar = document.querySelector('.carousel__bar--next');
   var dotsContainer = document.querySelector('.carousel__dots');
   var current = 0;
   var total = slides.length;
-
-  // Slide width as percentage (matches CSS min-width)
-  function getSlideWidth() {
-    return window.innerWidth < 768 ? 78 : 70;
-  }
 
   // Create dots
   for (var i = 0; i < total; i++) {
@@ -93,31 +88,21 @@ if (stickyCta && heroSection) {
   var dots = dotsContainer.querySelectorAll('.carousel__dot');
 
   function goTo(index) {
+    // Circular: wrap around
     if (index < 0) index = total - 1;
     if (index >= total) index = 0;
     current = index;
-    var sw = getSlideWidth();
-    // Center the active slide within the viewport
-    var padding = (100 - sw) / 2;
-    var offset = sw * current - padding;
-    // Clamp: don't scroll past start or end
-    var maxOffset = sw * (total - 1);
-    if (offset < 0) offset = 0;
-    if (offset > maxOffset) offset = maxOffset;
-    track.style.transform = 'translateX(-' + offset + '%)';
-    slides.forEach(function (s, i) {
-      s.classList.toggle('is-active', i === current);
-    });
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
     dots.forEach(function (d, i) {
       d.classList.toggle('is-active', i === current);
     });
   }
 
-  // Init first slide
+  // Init
   goTo(0);
 
-  prevBtn.addEventListener('click', function () { goTo(current - 1); });
-  nextBtn.addEventListener('click', function () { goTo(current + 1); });
+  prevBar.addEventListener('click', function () { goTo(current - 1); });
+  nextBar.addEventListener('click', function () { goTo(current + 1); });
 
   dotsContainer.addEventListener('click', function (e) {
     if (e.target.classList.contains('carousel__dot')) {
